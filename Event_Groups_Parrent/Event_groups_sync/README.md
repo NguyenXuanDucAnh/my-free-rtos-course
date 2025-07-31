@@ -1,13 +1,13 @@
 # Description
 
-Sử dụng 2 task, 1 task mô phỏng thu dữ liệu từ cảm biến nhiệt độ, 1 task mô phỏng thu dữ liệu từ cảm biến độ ẩm.
+### Task 1, 2, 3 (Sensor Tasks):
 
-Do xClearOnExit được set là pdTRUE nên phải cả 2 task cảm biến cùng set bit event thì task process data mới thoát được blocked state và đi vào thực thi chương trình.
+- nĐọc dữ liệu từ cảm biến (giả lập bằng vTaskDelay)
 
+- Đồng bộ bằng xEventGroupSync() để báo đã hoàn thành vòng xử lý
 
-# Table explain xWaitForAllBits
+### Task 4 (Processing Task):
 
-![alt text](image.png)
+- Chờ cả 3 task cảm biến hoàn thành
 
-
-==> tạo các ví dụ giống như trong table minh họa
+- Xử lý dữ liệu tổng hợp sau khi tất cả sẵn sàng

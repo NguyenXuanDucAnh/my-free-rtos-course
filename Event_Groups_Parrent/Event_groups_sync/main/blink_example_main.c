@@ -19,9 +19,6 @@ void TaskTemp(void *pvParameters)
 
         xEventGroupSync(xSyncGroup, BIT_TEMP, ALL_BITS, portMAX_DELAY);
 
-        printf("TaskTemp: All sensors ready -> send data\n");
-
-        vTaskDelete(NULL); // Kết thúc task sau khi gửi dữ liệu
     }
 }
 
@@ -30,13 +27,10 @@ void TaskHumi(void *pvParameters)
     for(;;)
     {
         vTaskDelay(pdMS_TO_TICKS(2000));
-        printf("Temp done, waiting sync...\n");
+        printf("Humi done, waiting sync...\n");
 
         xEventGroupSync(xSyncGroup, BIT_HUMI, ALL_BITS, portMAX_DELAY);
 
-        printf("TaskHumi: All sensors ready -> send data\n");
-
-        vTaskDelete(NULL); // Kết thúc task sau khi gửi dữ liệu
     }
 }
 
@@ -45,13 +39,10 @@ void TaskLight(void *pvParameters)
     for(;;)
     {
         vTaskDelay(pdMS_TO_TICKS(3000));
-        printf("Temp done, waiting sync...\n");
+        printf("Light done, waiting sync...\n");
 
         xEventGroupSync(xSyncGroup, BIT_LIGHT, ALL_BITS, portMAX_DELAY);
 
-        printf("TaskLight: All sensors ready -> send data\n");
-
-        vTaskDelete(NULL); // Kết thúc task sau khi gửi dữ liệu
     }
 }
 
@@ -59,7 +50,7 @@ void data_processing_task(void *param)
 {
     while (1)
     {
-        printf("Waiting for both sensors...\n");
+        printf("Waiting for both sensors...\n\n");
 
         // Chờ cả hai bit (nhiệt độ và độ ẩm) được set
         EventBits_t bits = xEventGroupWaitBits(
@@ -71,15 +62,8 @@ void data_processing_task(void *param)
 
         if((bits & ALL_BITS) == ALL_BITS)
         {
-            printf("[Processing] All 3 sensors ready -> Process data now!\n\n");
-            // Giả lập xử lý dữ liệu
-            vTaskDelay(pdMS_TO_TICKS(300));
+            printf("[Processing] All 3 sensors ready -> Process data now!\n");
         }
-
-
-        vTaskDelay(pdMS_TO_TICKS(1000)); // delay một chút để tránh printf ra quá nhanh và tránh waitchdog timer
-
-        vTaskDelete(NULL); // Kết thúc task sau khi gửi dữ liệu
     }
 }
 
