@@ -28,7 +28,7 @@ void sensor_task_temp(void *param)
     while (1)
     {
         // Giả lập việc đọc xong nhiệt độ (VD: sau 2s)
-        vTaskDelay(pdMS_TO_TICKS(2000));
+        vTaskDelay(pdMS_TO_TICKS(12000));
         printf("Temperature ready\n");
 
         // Set bit nhiệt độ đã sẵn sàng
@@ -41,7 +41,7 @@ void sensor_task_humi(void *param)
     while (1)
     {
         // Giả lập việc đọc xong độ ẩm (VD: sau 3s)
-        vTaskDelay(pdMS_TO_TICKS(3000));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         printf("Humidity ready\n");
 
         // Set bit độ ẩm đã sẵn sàng
@@ -59,7 +59,7 @@ void data_processing_task(void *param)
         EventBits_t bits = xEventGroupWaitBits(
             sensor_event_group,               // Event group đang chờ
             BIT_TEMP_READY | BIT_HUMI_READY,  // Các bit cần chờ
-            pdTRUE,   // Xóa các bit sau khi nhận để chờ lần tiếp theo
+            pdTRUE,   // Xóa các bit sau khi nhận để xem tình huống gì sẽ xảy ra
             pdTRUE,   // Chờ TẤT CẢ các bit được set
             portMAX_DELAY);  // Không timeout, chờ vô thời hạn
 
@@ -71,20 +71,7 @@ void data_processing_task(void *param)
         }
 
 
-        // // Chờ cả hai bit (nhiệt độ và độ ẩm) được set
-        // EventBits_t bits2 = xEventGroupWaitBits(
-        //     sensor_event_group,               // Event group đang chờ
-        //     BIT_TEMP_READY | BIT_HUMI_READY,  // Các bit cần chờ
-        //     pdFALSE,   // Xóa các bit sau khi nhận để chờ lần tiếp theo
-        //     pdTRUE,   // Chờ TẤT CẢ các bit được set
-        //     portMAX_DELAY);  // Không timeout, chờ vô thời hạn
-
-        // if ((bits & (BIT_TEMP_READY | BIT_HUMI_READY)) ==
-        //     (BIT_TEMP_READY | BIT_HUMI_READY))
-        // {
-        //     printf("====> pdFALSE Both sensors are ready, processing data... %lx\n", bits2);
-        //     // Xử lý dữ liệu ở đây
-        // }
+        vTaskDelay(pdMS_TO_TICKS(1000)); // delay một chút để tránh printf ra quá nhanh và tránh waitchdog timer
     }
 }
 
