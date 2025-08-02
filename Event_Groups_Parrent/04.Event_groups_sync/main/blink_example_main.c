@@ -34,7 +34,7 @@ void TaskTemp(void *pvParameters)
         temperature /= max_collection_temp; // Average temperature
         printf("Temp: %f, set bit...\n", temperature);
 
-        xEventGroupSetBits(xSyncGroup, BIT_TEMP);
+        xEventGroupSync(xSyncGroup, BIT_TEMP, ALL_BITS, portMAX_DELAY);
     }
 }
 
@@ -52,7 +52,7 @@ void TaskHumi(void *pvParameters)
         humidity /= max_collection_humi; // Average temperature
         printf("humidity: %f, set bit...\n", humidity);
 
-        xEventGroupSetBits(xSyncGroup, BIT_HUMI);
+        xEventGroupSync(xSyncGroup, BIT_HUMI, ALL_BITS, portMAX_DELAY);
     }
 }
 
@@ -72,7 +72,7 @@ void TaskLight(void *pvParameters)
         printf("light: %f, set bit...\n", light);
 
 
-        xEventGroupSetBits(xSyncGroup, BIT_LIGHT);
+        xEventGroupSync(xSyncGroup, BIT_LIGHT, ALL_BITS, portMAX_DELAY);
     }
 }
 
